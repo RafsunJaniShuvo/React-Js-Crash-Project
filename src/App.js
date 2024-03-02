@@ -1,32 +1,59 @@
-
-import { useState } from 'react';
+import React, { useState } from 'react';
+import AddList from './AddList';
 import './App.css';
-import Tittle from './Tittle';
+import Modal from './Modal';
 
+const data = [
+  {
+    id: 1,
+    title: "i love Javascript",
+    StartDate: "20/8/2016"
+  },
+  {
+    id: 2,
+    title: "i love python",
+    StartDate: "20/8/2017"
+  },
+  {
+    id: 3,
+    title: "i love php",
+    StartDate: "20/8/2018"
+  },
+]
 
 function App() {
-  const [name,setName] = useState(" Online");
+  const [list, setList] = useState(data)
+  const [showModal, setShowModal] = useState(false)
 
-  const [number,setNumber] = useState(1);
-  // const name = "Rafsun";
-  let instructor = "Rafsunnnnn Fortis Group";
-
-  const handleClick = () => {
-    setNumber(prevState => prevState + 1);
+  const handleDelete = (id) => {
+    const filterList = list.filter(item => item.id !== id)
+    setList(filterList)
   }
 
   return (
     <div className="App">
-      <h2>{number}</h2>
-        <button onClick={handleClick}>Increase Number</button>
-      <div>
-        Learning React js From {name}
+      <h2 style={{textAlign: "center", margin: "50px"}}>Learn Creact From <span style={{color: "red"}}>Code ABC</span></h2>
+      {
+        list.map(item => (
+          <div  onClick={() => handleDelete(item.id)} key={item.id} className="card">
+            <h2>{item.title}</h2>
+            <p>{item.StartDate}</p>
+          </div>
+        ))
+      }
+      <div className="btn_container">
+      <button onClick={(e) => setShowModal(true)}>add List</button>
       </div>
-        <button onClick={(e)=>setName("Youtube")}>
-          click here
-        </button>
-      {/* props */}
-      <Tittle instructor={instructor} />
+
+
+      {
+        showModal && <Modal>
+        <AddList setList={setList} setShowModal = {setShowModal} />
+        <button onClick={e => setShowModal(false)}>CLOSE MODAL</button>
+      </Modal>
+      }
+      
+      
     </div>
   );
 }
